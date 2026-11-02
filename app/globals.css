@@ -1,26 +1,184 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap");
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
 
-@theme inline {
-  --color-background: var(--background);
+:root {
+  /* --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-mono: var(--font-geist-mono); */
+  --font-roboto : "Roboto", sans-serif;
+  --color-coolgreen: #2bd97c;
+  --range-progress: 0%;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@theme {  
+}
+
+@layer base {
+  * {
+    font-family: var(--font-roboto);
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
+
+  h1 {
+    @apply text-5xl font-bold;
+  }
+
+  h2 {
+    @apply text-3xl font-bold;
+  }
+
+  h3 {
+    @apply text-2xl font-bold;
+  }
+
+  h4 {
+    @apply text-xl;
+  }
+
+  p {
+    @apply text-sm;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+
+  .flex__col--ctr {
+    @apply flex flex-col items-center justify-center;
+  }
+
+  /* HOME PAGE - GENERAL */
+
+  .home__container {
+    @apply py-10 w-full;
+  }
+
+  .home__row {
+    @apply max-w-[1070px] w-full mx-auto py-0 px-6;
+  }
+
+  .section__title {
+    @apply text-[1.5rem] md:text-[2rem] text-[#032b41] text-center font-bold;
+  }
+  
+  .login__btn {
+    @apply cursor-pointer outline-none border-none bg-[#2bd97c] text-[#032b41] w-full h-10 rounded text-base transition-colors
+                                 duration-200 flex items-center justify-center min-w-11 max-w-75
+                                 hover:bg-[#20ba68] active:translate-y-px disabled:cursor-not-allowed disabled:opacity-65;
+  }
+
+
+  /* FEATURES SECTION */
+  
+  .feature__wrapper {
+    @apply flex flex-col items-center text-center;
+  }
+
+  .feature__icon--wrapper {
+    @apply flex justify-center mb-2 text-[#032b41];
+  }
+
+  .feature__icon {
+    @apply w-12 md:w-15 h-12 md:h-15;
+  }
+
+  .feature__title {
+    @apply text-[1.25rem] md:text-[1.5rem] text-[#032b41] mb-4 font-medium;
+  }
+
+  .feature__subtitle {
+    @apply text-[0.875rem] md:text-[1.125rem] text-[#394547] font-light;
+  }
+
+
+  /* STATISTICS SECTION */
+
+  .statistics__row {
+    @apply flex flex-col md:flex-row gap-8 md:gap-20 mb-8;
+  }
+
+  .statistics__content--wrapper {
+    @apply w-full flex flex-col justify-center gap-4;
+  }
+
+  .statistics__heading {
+    @apply text-[1.5rem] md:text-[2rem] font-medium;
+  }
+
+  .statistics__data--wrapper {
+    @apply w-full flex flex-col justify-center gap-6 bg-[#F1F6F4] text-[#f1f6f4] py-10 px-6;
+  }
+
+  .statistics__data--number {
+    @apply text-[#0365f2] text-[1.25rem] font-semibold mt-1;
+  }
+
+  .statistics__data--text {
+    @apply text-[1rem] md:text-[1.25rem] font-light text-[#394547];
+  }
+
+
+/* REVIEWS SECTION */
+  .review__wrapper {
+    @apply flex flex-col gap-2 p-4 rounded bg-[#fff3d7] font-light;
+  }
+
+  .review__header {
+    @apply text-[#032b41] flex gap-2;
+  }
+
+  .review__star {
+    @apply w-4 h-4 text-[#0564f1];
+  }
+
+  .review__body {
+    @apply text-[0.875rem] md:text-[1rem] text-[#394547] leading-[1.4] tracking-[0.3px];
+  }
+
+
+/* NUMBERS SECTION */
+
+  .number__wrapper {
+    @apply bg-[#d7e9ff] flex flex-col items-center text-center p-6 pb-10 rounded-xl;
+  }
+
+  .number__icon--wrapper {
+    @apply flex items-center h-15;
+  }
+
+  .number__title {
+    @apply text-[2rem] md:text-[2.5rem] text-[#032b41] font-semibold mb-4;
+  }
+
+  .number__subtitle {
+    @apply text-[0.875rem] md:text-[1rem] text-[#394547] font-light;
+  }
+
+
+  /* LOGIN MODAL */
+  .or-separator {
+    @apply relative text-sm font-medium  
+           before:absolute before:top-1/2 before:left-[300%] before:h-[0.5px] before:w-33 
+           after:absolute after:top-1/2 after:right-[300%] after:h-[0.5px] after:w-33;
+  }
+
+  .modal__comp--size {
+    @apply w-84 h-10 rounded;
+  }
+
+  .modal__field {
+    @apply px-3 border-2 border-gray-300 text-sm outline-0 focus:border-[#2bd97c];
+  }
+
+
+  /* DASHBOARD SIDEBAR */
+  .dashboard__link {
+    @apply flex items-center h-14 text-[#032b41] 
+         hover:bg-[#f0efef] transition-colors duration-200;
+  }
+
 }
