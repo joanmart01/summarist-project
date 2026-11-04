@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { LayoutContext } from "./layout";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 
 export default function Home() {
   const {showLoginModal} = useContext(LayoutContext);
@@ -286,7 +285,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-      <Footer />
     </div>
   );
 }

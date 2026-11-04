@@ -7,12 +7,14 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono); */
-  --font-roboto : "Roboto", sans-serif;
-  --color-coolgreen: #2bd97c;
   --range-progress: 0%;
 }
 
-@theme {  
+@theme {
+  --font-roboto: "Roboto", sans-serif;
+  --color-coolgreen: #2bd97c;
+  --color-deepblue: #032b41;
+  /* --transition-property-height: height; */
 }
 
 @layer base {
@@ -29,7 +31,9 @@
   }
 
   h2 {
-    @apply text-3xl font-bold;
+    font-size: 32px;
+    line-height: var(--tw-leading, var(--text-3xl--line-height) /* calc(2.25 / 1.875) ≈ 1.2 */);
+    font-weight: 700;
   }
 
   h3 {
@@ -40,12 +44,30 @@
     @apply text-xl;
   }
 
+  h5 {
+    font-size: 18px;
+    line-height: var(--tw-leading, var(--text-xl--line-height) /* calc(1.75 / 1.25) ≈ 1.4 */);
+  }
+
+  h6 {
+    font-size: 16px;
+    line-height: var(--tw-leading, var(--text-xl--line-height) /* calc(1.75 / 1.25) ≈ 1.4 */);
+  }
+
   p {
     @apply text-sm;
   }
 }
 
 @layer components {
+
+  .row {
+    @apply w-full max-w-267.5 px-6 mx-auto my-0;
+  }
+
+  .container {
+    @apply py-10 w-full;
+  }
 
   .flex__col--ctr {
     @apply flex flex-col items-center justify-center;
@@ -66,8 +88,9 @@
   }
   
   .login__btn {
-    @apply cursor-pointer outline-none border-none bg-[#2bd97c] text-[#032b41] w-full h-10 rounded text-base transition-colors
-                                 duration-200 flex items-center justify-center min-w-11 max-w-75
+    @apply outline-none border-none bg-coolgreen text-deepblue w-full h-10 rounded text-base transition-colors
+                                 duration-200 flex items-center justify-center 
+                                 min-w-11 max-w-75
                                  hover:bg-[#20ba68] active:translate-y-px disabled:cursor-not-allowed disabled:opacity-65;
   }
 
@@ -180,5 +203,11 @@
     @apply flex items-center h-14 text-[#032b41] 
          hover:bg-[#f0efef] transition-colors duration-200;
   }
+
+
+
+  /* .transition__height {
+    transition-property: height;
+  } */
 
 }

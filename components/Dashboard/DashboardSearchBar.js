@@ -58,25 +58,27 @@ function DashboardSearchBar() {
     }
 
     return(
-        <div className="relative flex items-center justify-end px-8 bg-white 
-                        border-b-1 border-[#e1e7ea] border-solid h-20 w-full">
-            <div className="flex items-center w-full max-w-85 gap-2 bg-[#f1f6f4]
-                            border-2 border-solid border-[#e1e7ea] rounded-lg">
-                <input type="text"
-                       ref={textRef} 
-                       placeholder="Search for books"
-                       onChange={(e) => searchBook(e.target.value)}
-                       onKeyDown={(e) => switchButton(e)}
-                    //    onBlur={resetData}
-                       className="text-[#042330] h-10 w-full px-4 py-0 outline-none"/>
-                <button className="flex items-center justify-center px-2 h-full border-l-2 border-solid border-[#e1e7ea] text-[#032b41]"
-                        onClick={clearTextField}>
-                    <figure className="w-6 h-6 p-0">
-                        {typing ? <FontAwesomeIcon icon={faX} />
-                                : <FontAwesomeIcon icon={faMagnifyingGlass} />} 
-                    </figure> 
-                </button>
+        <div className="sticky flex justify-center w-full border-b border-[#e1e7ea]">
+            <div className="flex items-center justify-end h-20 w-267.5 px-8 bg-white">
+                <div className="flex items-center w-full max-w-85 gap-2 bg-[#f1f6f4]
+                                border-2 border-[#e1e7ea] rounded-lg">
+                    <input type="text"
+                        ref={textRef} 
+                        placeholder="Search for books"
+                        onChange={(e) => searchBook(e.target.value)}
+                        onKeyDown={(e) => switchButton(e)}
+                        //    onBlur={resetData}
+                        className="text-[#042330] h-10 w-full px-4 py-0 outline-none"/>
+                    <button className="flex items-center justify-center px-2 h-full border-l-2 border-solid border-[#e1e7ea] text-deepblue"
+                            onClick={clearTextField}>
+                        <figure className="w-6 h-6 p-0">
+                            {typing ? <FontAwesomeIcon icon={faX} />
+                                    : <FontAwesomeIcon icon={faMagnifyingGlass} />} 
+                        </figure> 
+                    </button>
+                </div>
             </div>
+            
 
             {searchState != dormant_state && 
             <div className="absolute flex flex-col overflow-auto 
@@ -102,7 +104,7 @@ function DashboardSearchBar() {
                                 <img className="w-full h-full" src={book.imageLink} />
                             </figure>
                             <div className="">
-                                <h3 className="text-[#032b41]">{book.title}</h3>
+                                <h3 className="text-deepblue">{book.title}</h3>
                                 <h6 className="text-[#6b757b]">{book.author}</h6>
                                 <h6 className="text-[#6b757b]">duration??</h6>
                             </div>
@@ -110,14 +112,7 @@ function DashboardSearchBar() {
                         )
                     })
                 }
-
-
-
-
-
-
             </div>}
-
         </div>
     )
 }

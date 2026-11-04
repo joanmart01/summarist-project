@@ -6,8 +6,8 @@ import { faBookmark, faCircleQuestion, faHouse } from "@fortawesome/free-regular
 import { faArrowRightFromBracket, faFont, faGear, faHighlighter, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 
 
-function DashboardSidebar({readingMode, bookInfoMode, bookInfoModeFunction, 
-                        fontSizeFunction, userSetterFunction, currentUser, openLoginModal}) {
+function DashboardSidebar({readingMode, bookInfoMode, bookInfoModeFunction, fontSizeFunction, 
+                        userSetterFunction, currentUser, openLoginModal, playerShowing}) {
     const router = useRouter();
     
     const defaultSelection = 1;
@@ -31,11 +31,11 @@ function DashboardSidebar({readingMode, bookInfoMode, bookInfoModeFunction,
             }
         }
         return (
-            <div className={`${!route && "cursor-not-allowed "}`}>
+            <div className={`${!route? "cursor-not-allowed " : "cursor-pointer"}`}>
                 <div className={`dashboard__link ${!route && "pointer-events-none"}`}
                      onClick={handleClick}>
-                    <div className={`w-[5px] h-full mr-4
-                                    ${currentSelection==id && bookInfoMode? "bg-[#2bd97c]" : "bg-[#f7faf9]"}`}></div>
+                    <div className={`w-1.25 h-full mr-4
+                                    ${currentSelection==id && bookInfoMode? "bg-coolgreen" : "bg-[#f7faf9]"}`}></div>
                     {icon && 
                     <div className="flex items-center justify-center h-full mr-2 text-[24px]">
                         <FontAwesomeIcon icon={icon} size="1px" />
@@ -81,7 +81,7 @@ function DashboardSidebar({readingMode, bookInfoMode, bookInfoModeFunction,
                         onClick={handleClick}>
                     <FontAwesomeIcon icon={faFont} fontSize={size} />
                 </button>
-                <div className={`w-8 h-1 ${currentFont==size? "bg-[#2bd97c]" : "bg-[#f7faf9]"}`} />
+                <div className={`w-8 h-1 ${currentFont==size? "bg-coolgreen" : "bg-[#f7faf9]"}`} />
             </div>
 
         )
@@ -89,7 +89,8 @@ function DashboardSidebar({readingMode, bookInfoMode, bookInfoModeFunction,
 
 
     return (
-        <div className="flex flex-col items-center p-2 bg-[#f7faf9] w-50 min-w-50 h-screen gap-10">
+        <div className={`sticky z-3 left-0 flex flex-col items-center p-2 bg-[#f7faf9]  gap-10 
+                        w-50 min-w-50 h-${playerShowing? "[calc(100vh-90px)]" : "screen"}`}>
             <figure className="flex items-center justify-center max-w-40 h-15 pt-4">
                 <img src="/images/logo.png" alt="logo" />
             </figure> 
@@ -101,7 +102,7 @@ function DashboardSidebar({readingMode, bookInfoMode, bookInfoModeFunction,
                     <DashLink linkId={4} text="Search" icon={faMagnifyingGlass} />
                     
                     {readingMode &&
-                    <div className="flex items-end h-14 ml-6 gap-2 text-[#032b41]">
+                    <div className="flex items-end h-14 ml-6 gap-2 text-deepblue">
                         <FontBtn size={defaultFontSize} />
                         <FontBtn size={18} />
                         <FontBtn size={24} />

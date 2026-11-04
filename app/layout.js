@@ -7,6 +7,7 @@ import DashboardSidebar from "../components/Dashboard/DashboardSidebar";
 import DashboardSearchBar from "../components/Dashboard/DashboardSearchBar";
 import { AudioPlayerProvider } from "../components/Player/audio-player-context";
 import { AudioPlayer } from "../components/Player/AudioPlayer";
+import Footer from "../components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -60,7 +61,7 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body>
+      <body className="overflow-y-hidden">
         <LayoutContext.Provider value={contextValue} className="min-h-full flex flex-col">
           
           {loginModal && 
@@ -75,14 +76,20 @@ export default function RootLayout({ children }) {
                                     fontSizeFunction={setFontSize}
                                     currentUser={currentUser}
                                     userSetterFunction={setCurrentUser}
-                                    openLoginModal={showLoginModal}/>
+                                    openLoginModal={showLoginModal}
+                                    playerShowing={player}/>
                   <div className="flex flex-col w-full">
                     <DashboardSearchBar />
-                    {children}
+                      <div className={`w-full h-[calc(100vh-${player? "200" : "80"}px)] overflow-y-auto`}>
+                        {children}
+                      </div>
                   </div>
               </div>
             :
-              <div>{children}</div>
+            <div className="w-full h-screen overflow-y-auto">
+              {children}
+              <Footer />
+            </div>
             }
             {player && <AudioPlayer />}
           </AudioPlayerProvider>

@@ -31,11 +31,11 @@ function convertFontSize(num) {
 }
 
     return (
-        <div>
-            <h1 className="text-2xl font-bold">
+        <div className="text-deepblue p-6 max-w-200 mx-auto my-0 whitespace-pre-line">
+            <h3 className="text-2xl font-bold border-b border-[#e1e7ea] max-w-200 pb-4 mb-8">
                 {currentTrack.title || ""}
-            </h1>
-            <div className={`leading-normal text-${convertFontSize(fontSize)}`}>
+            </h3>
+            <div className={`leading-normal max-w-200 text-${convertFontSize(fontSize)}`}>
                 {currentTrack.summary || ""}
             </div>
         </div>

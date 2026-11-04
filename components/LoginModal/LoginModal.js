@@ -109,7 +109,7 @@ export default function LoginModal({closeFunction, dashboardFunction, userSetter
 
 
   return (
-    <div className="absolute inset-0 bg-black/75 fixed flex items-center justify-center" 
+    <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-10" 
           onClick={e => closeFunction(false)}>
 
       <div className="w-100 bg-white rounded-lg overflow-hidden" 
