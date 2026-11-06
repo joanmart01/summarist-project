@@ -6,7 +6,7 @@ export const TrackInfo = () => {
     const {currentTrack} = useAudioPlayerContext();
     
     return (
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-4 w-1/3">
             <div className="w-24 h-24 flex items-center justify-center bg-gray-200 rounded-md overflow-hidden">
             {currentTrack.thumbnail ? (
                 <img

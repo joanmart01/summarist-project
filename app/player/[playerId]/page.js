@@ -1,5 +1,4 @@
 "use client"
-import { useRouter, useParams } from "next/navigation";
 import { useEffect, useContext } from "react";
 import { LayoutContext } from "../../layout";
 import { useAudioPlayerContext } from "../../../components/Player/audio-player-context";

@@ -26,22 +26,15 @@ export const ProgressBar = () => {
     }
 
     return (
-        <div className="flex items-center justify-center gap-5 w-full">
+        <div className="flex items-center justify-center gap-5 w-1/3">
             <span>{formatTime(timeProgress)}</span>
             <input ref={progressBarRef}
                    type="range"
                    defaultValue="0"
                    onChange={handleProgressChange}
-                   className={`relative max-w-[80%] w-full h-0.5 rounded-sm cursor-pointer bg-white
-                              before:absolute before:content-[''] before:bg-[rgb(43,217,124)] before:rounded-l-sm before:top-0 before:left-0
-                              before:h-0.5 before:w-[var(--range-progress)] 
-                              appearance-none
-                              [&::-webkit-slider-thumb]:w-0.5 
-                              [&::-webkit-slider-thumb]:h-0.5 
-                              [&::-webkit-slider-thumb]:rounded-full
-                              [&::-webkit-slider-thumb]:border-none
-                              [&::-webkit-slider-thumb]:bg-white
-                            `}  
+                   className={`appearance-none relative max-w-[80%] w-full h-1 rounded-sm cursor-pointer bg-[#6d787d]
+                              before:absolute before:content-['']  before:h-1 before:bg-coolgreen before:rounded-l-sm before:top-0 before:left-0
+                              accent-white before:w-[var(--range-progress)]`}  
             />
             <span>{formatTime(duration)}</span>
         </div>

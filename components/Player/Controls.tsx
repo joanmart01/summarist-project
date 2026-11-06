@@ -73,23 +73,26 @@ export const Controls = () => {
     }, [isPlaying, startAnimation, updateProgress, audioRef]);
 
     return (
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-4 items-center justify-center w-1/3">
             <audio src={currentTrack.audioLink} 
                    ref={audioRef}
                    onLoadedMetadata={uploadDuration}
             />
-            <button onClick={skipForward}>
-                <BsArrowCounterclockwise size={20} />
+            <button onClick={skipForward} className="relative flex justify-center h-7 w-7 items-center p-0">
+                <p className="text-[10px] pt-0.5">10</p>
+                <BsArrowCounterclockwise className="size-full absolute top-0" />
             </button>
-            <button onClick={() => setIsPlaying((prev) => !prev)}>
+            <button className="flex justify-center size-10 items-center p-0 rounded-full bg-white text-[#042330]"
+                    onClick={() => setIsPlaying((prev) => !prev)}>
                 {isPlaying ? (
-                <BsFillPauseFill size={30} />
+                <BsFillPauseFill className="size-7" />
                 ) : (
-                <BsFillPlayFill size={30} />
+                <BsFillPlayFill className="size-7" />
                 )}
             </button>
-            <button onClick={skipBackward}>
-                <BsArrowClockwise size={20} />
+            <button onClick={skipBackward} className="relative flex justify-center h-7 w-7 items-center p-0">
+                <p className="text-[10px] pt-0.5">10</p>
+                <BsArrowClockwise className="size-full absolute top-0" />
             </button>
         </div>
     )

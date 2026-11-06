@@ -32,7 +32,7 @@ export default function RootLayout({ children }) {
   
   const [loginModal, showLoginModal] = useState(false);
   const [dashboard, showDashboard] = useState(false);
-  const [player, showPlayer] = useState();
+  const [player, showPlayer] = useState(false);
   const [readingMode, setReadingMode] = useState(false);
   const [fontSize, setFontSize] = useState(16);
   const [bookInfoMode, setBookInfoMode] = useState(true);
