@@ -12,6 +12,7 @@ async function ForYouPage() {
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
     const headersData = await headers();
+    const authorization = headersData.get("authorization");
     const host = headersData.get("host");
     const protocol = headersData.get("x-forwarded-proto") ?? host.startWith("localhost") ? "http" : "https";
     const apiBase = `${protocol}://${host}`;
@@ -23,8 +24,14 @@ async function ForYouPage() {
 
     async function SelectedBook() {
         console.log("api base:" + apiBase);
-        const res = await fetch(`${apiBase}/api/books/selected`);
+        //const res = await fetch(`${apiBase}/api/books/selected`);
         //const res = await fetch(`http://localhost:3000/api/books/selected`);
+        const res = await fetch(`/api/books/selected`, {
+            headers: {
+                "authorization": authorization,
+                "Content-Type": "application/json",
+            },
+        });
         console.log(res);
         const {data} = await res.json();
         const book = data[0];
@@ -58,8 +65,14 @@ async function ForYouPage() {
 
     async function RecommendedBooks(){
         console.log("api base:" + apiBase);
-        const res = await fetch(`${apiBase}/api/books/recommended`);
+        //const res = await fetch(`${apiBase}/api/books/recommended`);
         //const res = await fetch(`http://localhost:3000/api/books/recommended`);
+                const res = await fetch(`/api/books/recommended`, {
+            headers: {
+                "authorization": authorization,
+                "Content-Type": "application/json",
+            },
+        });
         console.log(res);
         const {data} = await res.json();
         return (
@@ -73,8 +86,14 @@ async function ForYouPage() {
 
     async function SuggestedBooks() {
         console.log("api base:" + apiBase);
-        const res = await fetch(`${apiBase}/api/books/suggested`);
+        //const res = await fetch(`${apiBase}/api/books/suggested`);
         //const res = await fetch(`http://localhost:3000/api/books/suggested`);
+        const res = await fetch(`/api/books/suggested`, {
+            headers: {
+                "authorization": authorization,
+                "Content-Type": "application/json",
+            },
+        });
         console.log(res);
         const {data} = await res.json();
         return (
