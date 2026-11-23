@@ -1,7 +1,7 @@
 import axios from "axios";
 import { parseStream } from "music-metadata";
 import fetch from "node-fetch";
-import { formatTime } from "../../components/tools";
+import { formatTime } from "../../../components/tools";
 
 async function addData(api) {
     const {data} = await axios.get(api);
