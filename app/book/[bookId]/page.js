@@ -6,6 +6,7 @@ import PlayerData from "../../../components/Player/PlayerData";
 import { Suspense } from "react";
 import AddToLibraryBtn from "../../../components/AddToLibraryBtn";
 import SkeletonBox from "../../../components/Loading/SkeletonBox";
+import { headers } from "next/headers";
 
 
 async function BookPage({params}) {
@@ -13,7 +14,12 @@ async function BookPage({params}) {
     
     async function BookInfo() {    
         const {bookId} = await params;
-        const res = await fetch(`/api/books/${bookId}`);
+        const headersData = await headers();
+        const host = headersData.get("host");
+        const protocol = headersData.get("x-forwarded-proto") ?? host.startWith("localhost") ? "http" : "https";
+        const apiBase = `${protocol}://${host}`;
+        const res = await fetch(`${apiBase}/api/books/${bookId}`);
+        //const res = await fetch(`http://localhost:3000/api/books/${bookId}`);
         const bookInfo = await res.json();
         return (
             <div className="flex flex-col items-center gap-4 text-deepblue

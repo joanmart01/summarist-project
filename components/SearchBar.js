@@ -3,8 +3,9 @@ import { useRouter } from 'next/navigation';
 import { faMagnifyingGlass, faX, faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faClock } from "@fortawesome/free-regular-svg-icons";
-import { useRef, useState, useContext } from "react";
+import { useRef, useState, useContext} from "react";
 import { LayoutContext } from '@/app/layout';
+
 
 
 function SearchBar() {
@@ -13,6 +14,8 @@ function SearchBar() {
     const loading_state = 1;
     const negative_state = 2;
     const results_state = 3;
+
+    const apiBase = window.location.origin
 
     const [typing, setTyping] = useState(false);
     const [searchState, setSearchState] = useState(dormant_state);
@@ -48,7 +51,8 @@ function SearchBar() {
         }
         setSearchState(loading_state);
         try {
-            const res = await fetch(`/api/books/search/${search}`);
+            const res = await fetch(`${apiBase}/api/books/search/${search}`);
+            //const res = await fetch(`http://localhost:3000/api/books/search/${search}`);
             const data = await res.json();
             const books = data || [];
             setSearchArray(books);

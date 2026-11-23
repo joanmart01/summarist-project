@@ -4,11 +4,17 @@ import { BsFillPlayFill } from "react-icons/bs";
 import BookRow from "../../components/BookRow";
 import SkeletonRow from "../../components/Loading/SkeletonRow";
 import SkeletonBox from "../../components/Loading/SkeletonBox";
-import {getAllBooks} from "../lib/books";
+import { headers } from "next/headers";
+
 
 
 async function ForYouPage() {
     await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    const headersData = await headers();
+    const host = headersData.get("host");
+    const protocol = headersData.get("x-forwarded-proto") ?? host.startWith("localhost") ? "http" : "https";
+    const apiBase = `${protocol}://${host}`;
 
     const recommendedTitle = "Recommended For You";
     const recommendedSub = "Suggested Books";
@@ -16,9 +22,9 @@ async function ForYouPage() {
     const suggestedSub = "Browse those books";    
 
     async function SelectedBook() {
-        const res = await fetch("/api/books/selected");
+        const res = await fetch(`${apiBase}/api/books/selected`);
+        //const res = await fetch(`http://localhost:3000/api/books/selected`);
         const {data} = await res.json();
-        //const data = await getAllBooks();
         const book = data[0];
         return (
             <Link href={`/book/${book.id}`} 
@@ -49,7 +55,8 @@ async function ForYouPage() {
     }
 
     async function RecommendedBooks(){
-        const res = await fetch("/api/books/recommended");
+        const res = await fetch(`${apiBase}/api/books/recommended`);
+        //const res = await fetch(`http://localhost:3000/api/books/recommended`);
         const {data} = await res.json();
         return (
             <BookRow title={recommendedTitle} 
@@ -61,7 +68,8 @@ async function ForYouPage() {
     }
 
     async function SuggestedBooks() {
-        const res = await fetch("/api/books/suggested");
+        const res = await fetch(`${apiBase}/api/books/suggested`);
+        //const res = await fetch(`http://localhost:3000/api/books/suggested`);
         const {data} = await res.json();
         return (
             <BookRow title={suggestedTitle}
