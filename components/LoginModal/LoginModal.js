@@ -1,28 +1,31 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter, usePathname } from 'next/navigation';
-import { createUserWithEmailAndPassword, 
-         signInWithEmailAndPassword, 
-         sendPasswordResetEmail, 
-         GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../../firebase";
+import { sendPasswordResetEmail } from "firebase/auth";
+import { auth, loginWithEmail, signup, loginWithGoogle } from "../../firebase";
 import GoogleOptionBtn from "./GoogleOptionBtn"; 
-import userIcon from "../../public/images/user-solid-full.svg";
 import SwitchBtn from "./SwitchBtn";
 import MainBtn from "./MainBtn";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
-import LargeButton from "./LargeButton";
+import LoadingSpinner from "../Loading/LoadingSpinner";
+import { LayoutContext } from "@/app/layout";
 
 
-export default function LoginModal({closeFunction, dashboardFunction, userSetterFunction}){
+export default function LoginModal(){
 
-  const [signInState, setSignInState] = useState("LOG IN");
+  const LOG_IN = "LOG IN";
+  const SIGN_UP = "SIGN UP";
+  const RECOVER = "RECOVER";
+  
+  const [signInState, setSignInState] = useState(LOG_IN);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [guestLoading, setGuestLoading] = useState(false);
+  
+  const {showLoginModal, showDashboard} = useContext(LayoutContext);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -33,65 +36,46 @@ export default function LoginModal({closeFunction, dashboardFunction, userSetter
     setSignInState(value);
   }
 
-  function handleSuccessfulLogin() {
-    dashboardFunction(true);
+  function handleSuccessLayout() {
     if(pathname == "/") router.push("/for-you");
+    showLoginModal(false);
+    showDashboard(true);
   }
 
   function loginAsGuest() {
     setGuestLoading(true);
-    userSetterFunction(null);
-    handleSuccessfulLogin();
+    handleSuccessLayout();
     setGuestLoading(false);
   }
 
-  function logInUser() {
+  async function logInUser() {
     setLoading(true);
-    signInWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      userSetterFunction({
-        email: email,
-        subscription: "basic" 
-      });
-      handleSuccessfulLogin();
-      // const user = userCredential.user;
-      // console.log(userCredential);
-      setErrorMessage("");
-      setLoading(false);
-    })
-    .catch((error) => {
+    try {
+      await loginWithEmail(email, password);
+      handleSuccessLayout();
+    } catch(error){
       setErrorMessage(error.message);
-    })
+    }
+    setLoading(false);
   }
 
-  function logInWithGoogle() {
+  async function logInWithGoogle() {
     setGoogleLoading(true);
-    signInWithPopup(auth, new GoogleAuthProvider())
-    .then((result) => {
-      //console.log(result);
-      userSetterFunction({
-        email: result.user.email,
-        subscription: "basic" 
-      });
-      handleSuccessfulLogin();
-      setGoogleLoading(false);
-    }).catch((error) => {
-      setErrorMessage(error.message);
-    })
+    const msg = await loginWithGoogle();
+    handleSuccessLayout();
+    setErrorMessage(msg);
+    setGoogleLoading(false);
   }
 
-  function registerUser(email, password) {
+  async function registerUser() {
     setLoading(true);
-    createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      const user = userCredential.user;
-      console.log(userCredential);
-      setErrorMessage("");
-      setLoading(false);
-    })
-    .catch((error) => {
+    try {
+      await signup(email, password);
+      switchSignInState(LOG_IN);
+    } catch(error) {
       setErrorMessage(error.message);
-    })
+    }
+    setLoading(false);
   }
 
   function sendRestLink() {
@@ -106,24 +90,22 @@ export default function LoginModal({closeFunction, dashboardFunction, userSetter
     })
   }
 
-
-
   return (
-    <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-10" 
-          onClick={e => closeFunction(false)}>
+    <div className="fixed inset-0 bg-black/75 flex items-center justify-center z-20" 
+          onClick={() => showLoginModal(false)}>
 
       <div className="w-100 bg-white rounded-lg overflow-hidden" 
-              onClick={e => e.stopPropagation()}>
+              onClick={(e) => e.stopPropagation()}>
           <div className="flex justify-end px-4">
               <button className="text-3xl font-semibold" 
-                      onClick={e=>closeFunction(false)}>
+                      onClick={() => showLoginModal(false)}>
                   ⨉
               </button>
           </div>
 
           
           <div className=" flex flex-col gap-2">
-              <h1 className="text-center text-xl py-4 font-bold text-[#032b41]">
+              <h1 className="text-center text-xl py-4 font-bold text-deepblue">
                   {signInState=="LOG IN"? 
                     "Log in to Summarist" :
                     signInState == "SIGN UP" ? 
@@ -141,16 +123,14 @@ export default function LoginModal({closeFunction, dashboardFunction, userSetter
                     <>
                       {signInState=="LOG IN" ?
                         <>
-                          {/* <LargeButton text={"Login as a Guest"} 
-                                       bgColor={"bg-[#3a579d]"} 
-                                       textColor={"text-white"} 
-                                       icon={userIcon}
-                                       clickFunction={loginAsGuest} /> */}
-                          <button className="relative modal__comp--size bg-[#3a579d] hover:bg-[#25396b] text-white
-                                              active:translate-y-0.25 transition-colors duration-200"
+                          <button className="relative flex justify-center items-center modal__comp--size bg-[#3a579d] hover:bg-[#25396b] text-white
+                                             active:translate-y-px transition-colors duration-200"
                                   onClick={loginAsGuest}>
-                            <FontAwesomeIcon icon={faUser} />
-                            Login as a Guest
+                            <FontAwesomeIcon className="absolute top-1 left-0 text-3xl" icon={faUser} />
+                            {guestLoading?
+                            <LoadingSpinner size={"size-6"} borderThickness={"border-3"} borderColor={"border-white"}/>
+                            :
+                            "Login as a Guest"}
                           </button>
 
                           <p className="or-separator text-gray-500 before:bg-gray-400 after:bg-gray-400">or</p> 
@@ -194,21 +174,21 @@ export default function LoginModal({closeFunction, dashboardFunction, userSetter
 
 
           <div className="flex__col--ctr mt-2">
-              {signInState=="LOG IN" ?
+              {signInState==LOG_IN ?
                   <>
                     <button className="py-2 text-sm font-light text-[#116be9] hover:text-[#124a98]
                                       transition-colors duration-200"
-                            onClick={() => switchSignInState("RECOVER")}>
+                            onClick={() => switchSignInState(RECOVER)}>
                       Forgot your password?
                     </button>
-                    <SwitchBtn switchFunction={switchSignInState} value={"SIGN UP"} text={"Don't have an account?"} />
+                    <SwitchBtn switchSignInState={switchSignInState} value={SIGN_UP} text={"Don't have an account?"} />
                   </>
                 :
                 <>
                   <div className="py-2 text-sm"></div>
-                  <SwitchBtn switchFunction={switchSignInState} 
-                             value={"LOG IN"} 
-                             text={signInState=="SIGN UP" ? "Already have an account?" : "Go to login"} />
+                  <SwitchBtn switchSignInState={switchSignInState} 
+                             value={LOG_IN} 
+                             text={signInState==SIGN_UP ? "Already have an account?" : "Go to login"} />
                 </>
 
               }

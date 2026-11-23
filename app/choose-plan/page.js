@@ -1,28 +1,23 @@
 "use client"  
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { payments } from "../../firebase";
 import { createCheckoutSession } from "@invertase/firestore-stripe-payments";
 import { FaFileLines, FaHandshake, FaSeedling} from "react-icons/fa6";
-import QuestionComponent from "../../components/Dashboard/QuestionComponent";
+import QuestionComponent from "../../components/QuestionComponent";
 
 function Page() {
-    const router = useRouter();
-
     const plus = {
         name: "premium-plus",
         period: "year",
         price: 99.99,
-        //productId: "prod_VUjoh8IGW7oFkV",
-        priceId: "price_1UTkTT1MytWSlkp1kzoZTMAP"
+        priceId: "price_1UUwRs1MytWSlkp1L2qolDEu"
     }
 
     const premium = {
         name: "premium",
         period: "month",
         price: 9.99,
-        //productId: "prod_VUjpsKqOnnzJjS",
-        priceId: "price_1UTkLo1MytWSlkp1QBhJVs2k"
+        priceId: "price_1UUwPJ1MytWSlkp1rupW8T4Q"
     }
 
     const[selectedPlan, setSelectedPlan] = useState(plus);
@@ -30,15 +25,11 @@ function Page() {
 
     async function handleCheckout() {
         try {
-            //const p = await getPrice(payments, selectedPlan.productId, selectedPlan.priceId);
-            // Example: create a checkout session for a specific price ID
             const session = await createCheckoutSession(payments, {
-                price: selectedPlan.priceId
-                /*success_url: window.location.origin + '/success',
-                cancel_url: window.location.origin + '/cancel',*/
+                price: selectedPlan.priceId,
+                success_url: window.location.origin + '/for-you'
+                /*cancel_url: window.location.origin + '/cancel',*/
             });
-
-            // Redirect to Stripe Checkout
             window.location.href = session.url;
         } catch (error) {
             console.error('Error creating checkout session:', error);
@@ -50,21 +41,21 @@ function Page() {
         const n = plan.name;
         const p = plan.period;
         return (
-            <label className={`flex items-start p-6 w-170 bg-[#f1f6f4] gap-6 border-4 rounded cursor-pointer 
+            <label className={`flex items-start p-6 w-full md:w-170 bg-[#f1f6f4] gap-6 border-4 rounded cursor-pointer 
                               ${selectedPlan===plan? "border-coolgreen" : "border-[#bac8ce]"}`}>
                 <div className="flex justify-center items-center w-6 h-6 border-2 border-black rounded-full">
                     <input type="radio" name="subscription-plan" value={n} 
                            className="w-1.5 h-1.5 accent-black"
                            checked={selectedPlan===plan}
-                           onChange={(e) => setSelectedPlan(plan)} 
+                           onChange={() => setSelectedPlan(plan)} 
                     />
                 </div>
                 <div className="flex flex-col">
-                    <h5 className="text-deepblue font-semibold">
+                    <h6 className="md:text-[18px] text-deepblue font-semibold">
                         {`${n.charAt(0).toUpperCase() + n.slice(1)} ${p.charAt(0).toUpperCase() + p.slice(1) + "ly"}`}
-                    </h5>
-                    <h3 className="text-deepblue">${`${plan.price}/${p}`}</h3>
-                    <p className="text-[#6b757b]">{description}</p>
+                    </h6>
+                    <h4 className="font-bold md:text-2xl text-deepblue">${`${plan.price}/${p}`}</h4>
+                    <p className="text-xs md:text-sm text-[#6b757b]">{description}</p>
                 </div>
             </label>   
         )
@@ -79,29 +70,8 @@ function Page() {
         )
     }
 
- /*   const QuestionComponent = ({question, answer, id}) => {
-        function handleClick() {
-            setCurrentQuestion((prev) => prev != id ? id : -1);
-        }
-        return (
-            <div className="flex flex-col border-b border-[#ddd] cursor-pointer"
-                 onClick={handleClick}>
-                <div className="flex justify-between py-6 items-center">
-                    <h3 className="text-deepblue font-medium">{question}</h3>
-                    <button>
-                        <FaChevronDown className={`size-6 stroke-1 ${currentQuestion===id && "rotate-180"} transition-transform duration-500`}/>
-                    </button>
-                </div>
-                <div className={`overflow-hidden ${currentQuestion!==id && "h-px"} transition-[height] duration-1000`}>
-                    <p className="pb-6 text-[#394547]">{answer}</p>
-                </div>
-            </div>
-        )
-    }*/
-
-
     return (
-        <div>
+        <div className="row">
             <div className="flex flex-col w-full items-center gap-14">
                 <div className="flex">
                     <div className="w-100 bg-deepblue rounded-bl-full"></div>
@@ -116,7 +86,7 @@ function Page() {
                 </div>
 
 
-                <div className="grid grid-cols-3 gap-6 max-w-200">
+                <div className="grid grid-rows-3 md:grid-rows-1 md:grid-cols-3 gap-6 max-w-200">
                     <FeatureComponent Icon={FaFileLines} 
                                       boldText={"Key ideas in few min"} 
                                       plainText={" with many books to read"} />
@@ -129,9 +99,9 @@ function Page() {
                 </div>
 
 
-                <div className="relative flex flex-col items-center">
-                    <div className="flex flex-col items-center gap-6">
-                        <h2 className="text-deepblue">Choose the plan that fits you</h2>
+                <div className="relative flex flex-col items-center w-full">
+                    <div className="flex flex-col items-center gap-6 w-full">
+                        <h3 className="md:text-[32px] text-deepblue">Choose the plan that fits you</h3>
                         <SubscriptionPlan plan={plus} description={"7-day free trial included"} />
                         <p className="or-separator text-[#6b757b] before:bg-[#6b757b] after:bg-[#6b757b]">or</p>
                         <SubscriptionPlan plan={premium} description={"No trial included"} />
@@ -151,7 +121,7 @@ function Page() {
                 </div>
 
 
-                <div className="flex flex-col gap-2 w-255 mb-8">
+                <div className="flex flex-col gap-2 mb-8">
                     <QuestionComponent question={"How does the free 7-day trial work?"}
                                        answer={"Begin your complimentary 7-day trial with a Summarist annual membership. You are under no obligation to continue your subscription, and you will only be billed when the trial period expires. With Premium access, you can learn at your own pace and as frequently as you desire, and you may terminate your subscription prior to the conclusion of the 7-day free trial."}
                                        id={1}

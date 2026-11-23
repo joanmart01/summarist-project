@@ -1,17 +1,19 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useContext } from "react";
 import { useAudioPlayerContext } from "../Player/audio-player-context";
+import { LayoutContext } from "@/app/layout";
 import { BsFillPauseFill, BsFillPlayFill, BsArrowClockwise, BsArrowCounterclockwise} from "react-icons/bs";
+import { addToFinishedLibrary } from "@/firebase";
 
 export const Controls = () => {
 
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
-    const {currentTrack, audioRef, duration, setDuration, setTimeProgress, progressBarRef} = useAudioPlayerContext();
+    const {currentUser} = useContext(LayoutContext);
+    const {currentTrack, audioRef, setTimeProgress, progressBarRef} = useAudioPlayerContext();
     const playAnimationRef = useRef<number | null>(null);
     
     const uploadDuration = () => {
-        const seconds = audioRef.current?.duration;
+        const seconds = currentTrack?.duration;
         if(seconds !== undefined) {
-            setDuration(seconds);
             if(progressBarRef.current) 
                 progressBarRef.current.max = seconds.toString(); 
         }
@@ -32,23 +34,23 @@ export const Controls = () => {
     }
 
     const updateProgress = useCallback(() => {
-        if(audioRef.current && progressBarRef.current && duration) {
+        if(audioRef.current && progressBarRef.current && currentTrack?.duration) {
             const currentTime = audioRef.current.currentTime;
             setTimeProgress(currentTime);
             progressBarRef.current.value = currentTime.toString();
-            progressBarRef.current.style.setProperty('--range-progress', `${(currentTime / duration) * 100}%`)
+            progressBarRef.current.style.setProperty('--range-progress', `${(currentTime / currentTrack.duration) * 100}%`)
         }
-    }, [duration, setTimeProgress, audioRef, progressBarRef])
+    }, [currentTrack?.duration, setTimeProgress, audioRef, progressBarRef])
 
     const startAnimation = useCallback(() => {
-        if(audioRef.current && progressBarRef.current && duration) {
+        if(audioRef.current && progressBarRef.current && currentTrack?.duration) {
             const animate = () => {
                 updateProgress();
                 playAnimationRef.current = requestAnimationFrame(animate);
             }
             playAnimationRef.current = requestAnimationFrame(animate);
         }
-    }, [updateProgress, duration, audioRef, progressBarRef]);
+    }, [updateProgress, currentTrack?.duration, audioRef, progressBarRef]);
 
     useEffect(()=> {
         if(isPlaying) {
@@ -73,9 +75,10 @@ export const Controls = () => {
     }, [isPlaying, startAnimation, updateProgress, audioRef]);
 
     return (
-        <div className="flex gap-4 items-center justify-center w-1/3">
-            <audio src={currentTrack.audioLink} 
+        <div className="flex gap-4 items-center justify-center md:w-1/3">
+            <audio src={currentTrack?.audioLink} 
                    ref={audioRef}
+                   onEnded={() => addToFinishedLibrary(currentUser.firestoreID, currentTrack)}
                    onLoadedMetadata={uploadDuration}
             />
             <button onClick={skipForward} className="relative flex justify-center h-7 w-7 items-center p-0">

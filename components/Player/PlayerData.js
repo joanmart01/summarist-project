@@ -1,16 +1,12 @@
 "use client"
 import { useEffect } from "react";
 import { useAudioPlayerContext } from "../Player/audio-player-context";
-import { useContext } from "react";
-import { LayoutContext } from "../../app/layout";
 
-export default function PlayerData({audioData}) {
-    const {setBookInfoMode} = useContext(LayoutContext);
+export default function PlayerData({book}) {
     const {setCurrentTrack} = useAudioPlayerContext();
 
     useEffect(() => {
-        setBookInfoMode(false);
-        setCurrentTrack(audioData);
+        setCurrentTrack(book);
     }, [])
     
     return <></>

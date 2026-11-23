@@ -1,30 +1,28 @@
-import axios from "axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBookmark, faClock, faLightbulb, faStar } from "@fortawesome/free-regular-svg-icons";
+import { faClock, faLightbulb, faStar, faBookmark } from "@fortawesome/free-regular-svg-icons";
 import { faBookOpen, faMicrophone } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import PlayerData from "../../../components/Player/PlayerData";
 import { Suspense } from "react";
+import AddToLibraryBtn from "../../../components/AddToLibraryBtn";
+import SkeletonBox from "../../../components/Loading/SkeletonBox";
 
 
 async function BookPage({params}) {
+    await new Promise((resolve) => setTimeout(resolve, 1500));
     
-    async function BookInfo() {
+    async function BookInfo() {    
         const {bookId} = await params;
-        const {data} = await axios.get(`https://us-central1-summaristt.cloudfunctions.net/getBook?id=${bookId}`);
-        const bookInfo = data;
-        
-        const playerPageData = {
-            title: bookInfo.title, 
-            summary: bookInfo.summary, 
-            author: bookInfo.author,
-            thumbnail: bookInfo.imageLink,
-            audioLink: bookInfo.audioLink
-        }
-
+        const res = await fetch(`http://localhost:3000/api/books/${bookId}`);
+        const bookInfo = await res.json();
         return (
-            <div className="flex gap-4 text-deepblue">
-                <PlayerData audioData={playerPageData} />
+            <div className="flex flex-col items-center gap-4 text-deepblue
+                            lg:flex-row-reverse lg:items-start">
+                <PlayerData book={bookInfo} />
+
+                <figure className="w-75 h-75 min-w-75">
+                    <img src={bookInfo.imageLink} className="w-full h-full" />
+                </figure>
 
                 <div className="flex flex-col">
                     <div className="flex flex-col">
@@ -46,7 +44,7 @@ async function BookPage({params}) {
                                 </div>
                                 <div className="flex items-center w-1/2">
                                     <FontAwesomeIcon icon={faClock} />
-                                    <p></p>
+                                    <p>{bookInfo.durationFormatted}</p>
                                 </div>
                                 <div className="flex items-center w-1/2">
                                     <FontAwesomeIcon icon={faLightbulb} />
@@ -72,17 +70,13 @@ async function BookPage({params}) {
                                     Listen
                                 </Link>
                             </div>
-                            <button className="flex items-center gap-2 font-medium text-[#0365f2] mb-10 
-                                             hover:text-[#044298] transition-colors duration-300">
-                                <FontAwesomeIcon icon={faBookmark} />
-                                <h5>Add title to My Library</h5>
-                            </button>
+                            <AddToLibraryBtn book={bookInfo}/>
                         </div>
                     </div>
 
                     <div className="flex flex-col gap-4">
                         <h5 className="font-semibold">What's it about?</h5>
-                        <div className="flex gap-4">
+                        <div className="flex flex-wrap gap-4">
                             {bookInfo.tags.map((tag, index) => (
                                 <button key={index} className="h-12 px-4 bg-[#f1f6f4] rounded font-medium">
                                     {tag}
@@ -95,18 +89,69 @@ async function BookPage({params}) {
                     </div> 
                 </div>
                     
-                <figure className="w-75 h-75 min-w-75">
-                    <img src={bookInfo.imageLink} className="w-full h-full" />
-                </figure>
+
 
             </div>
         )
     }
 
+
     return (
         <div className="row">
             <div className="container">
-                <Suspense fallback={<>Loading...</>}>
+                <Suspense 
+                    fallback={
+                    <div className="flex gap-4 text-deepblue">
+                        <div className="flex flex-col">
+                            <div className="flex flex-col">
+                                <div className="flex flex-col gap-4 mb-4">
+                                    <SkeletonBox width={"w-75"} height={"h-9.5"} />
+                                    <SkeletonBox width={"w-25"} height={"h-5.5"} />
+                                    <SkeletonBox width={"w-50"} height={"h-7"} />
+                                </div>
+
+                                <div className="flex flex-col py-4 border-y border-[#e1e7ea] gap-3 mb-6">
+                                    <div className="flex max-w-100 flex-wrap gap-y-3 font-medium">
+                                        <SkeletonBox width={"w-37"} height={"h-5"} />
+                                        <SkeletonBox width={"w-37"} height={"h-5"} />
+                                        <SkeletonBox width={"w-37"} height={"h-5"} />
+                                        <SkeletonBox width={"w-37"} height={"h-5"} />
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col gap-6">
+                                    <div className="flex gap-4">
+                                        <div className="flex items-center justify-center w-35 h-12 rounded gap-2 bg-deepblue text-white">
+                                            <FontAwesomeIcon icon={faBookOpen} />
+                                            Read
+                                        </div>
+                                        <div className="flex items-center justify-center w-35 h-12 rounded gap-2 bg-deepblue text-white">
+                                            <FontAwesomeIcon icon={faMicrophone} />
+                                            Listen
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-2 font-medium text-[#0365f2] mb-10">
+                                        <FontAwesomeIcon icon={faBookmark} />
+                                        <h5>Add title to My Library</h5>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col gap-4">
+                                <h5 className="font-semibold">What's it about?</h5>
+                                <div className="flex gap-4">
+                                    <SkeletonBox width={"w-48"} height={"h-12"} />
+                                    <SkeletonBox width={"w-48"} height={"h-12"} />
+                                </div>
+                                <SkeletonBox width={"w-170"} height={"h-37.5"} />
+
+                                <h5 className="font-semibold">About the author</h5>
+                                <SkeletonBox width={"w-170"} height={"h-45"} />
+                            </div> 
+                        </div>
+                        <SkeletonBox width={"w-75"} height={"h-75"} />
+
+                    </div> }>
                     <BookInfo />
                 </Suspense>
             </div>

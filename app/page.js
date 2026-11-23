@@ -21,7 +21,7 @@ export default function Home() {
 
   const StatisticHeading = ({id, text}) => {
     return (
-      <div className={`statistics__heading ${currentHighlight==id? "text-[#2bd97c]" : "text-[#6b757b]"}`}>
+      <div className={`statistics__heading ${currentHighlight==id? "text-coolgreen" : "text-[#6b757b]"}`}>
         {text}
       </div>
     )
@@ -36,10 +36,10 @@ export default function Home() {
             <div className="flex">
               <div className="flex flex-col items-center md:items-start text-center md:text-start 
                               max-w-135 mx-auto w-full">
-                <div className="text-[#032b41] text-[1.5rem] md:text-[2.5rem] font-bold mb-6">
+                <div className="text-deepblue text-[1.5rem] md:text-[2.5rem] font-bold mb-6">
                   Gain more knowledge <br/> in less time
                 </div>
-                <div className="text-[#032b41] text-[1.25rem] font-light mb-6 leading-6">
+                <div className="text-deepblue text-[1.25rem] font-light mb-6 leading-6">
                   Great summaries for busy people,
                   <br />
                   individuals who barely have time to read,

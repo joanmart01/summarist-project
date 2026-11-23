@@ -6,12 +6,12 @@ export const TrackInfo = () => {
     const {currentTrack} = useAudioPlayerContext();
     
     return (
-        <div className="flex items-center gap-4 w-1/3">
-            <div className="w-24 h-24 flex items-center justify-center bg-gray-200 rounded-md overflow-hidden">
-            {currentTrack.thumbnail ? (
+        <div className="flex items-center gap-4 md:w-1/3">
+            <div className="size-12 flex items-center justify-center rounded-md overflow-hidden">
+            {currentTrack?.imageLink ? (
                 <img
                 className="w-full h-full object-cover"
-                src={currentTrack.thumbnail}
+                src={currentTrack?.imageLink}
                 alt="audio avatar"
                 />
             ) : (
@@ -23,10 +23,10 @@ export const TrackInfo = () => {
             )}
             </div>
             <div>
-            <p className="font-bold lg:truncate lg:max-w-64">
-                {currentTrack.title}
+            <p className="text-wrap">
+                {currentTrack?.title}
             </p>
-            <p className="text-sm text-gray-400">{currentTrack.author}</p>
+            <p className="text-sm text-gray-400">{currentTrack?.author}</p>
             </div>
         </div>
     )

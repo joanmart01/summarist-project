@@ -1,18 +1,37 @@
 import { createContext, useContext, useState,
          ReactNode, Dispatch, SetStateAction, 
          useRef} from 'react';
-//import { tracks } from '../data/tracks';
+import { RefObject } from 'react';
 
 export interface Track {
-  title: string;
-  src: string;
-  author: string;
-  thumbnail?: string;
+    audioLink: string
+    author: string
+    authorDescription: string
+    averageRating: number
+    bookDescription: string
+    duration: number
+    durationFormatted: string
+    id: string
+    imageLink: string
+    keyIdeas: number
+    librarySection: string
+    status: string
+    subTitle: string
+    subscriptionRequired: boolean
+    summary: string
+    tags: string[]
+    title: string
+    totalRating: number
+    type: string
 }
 
 interface AudioPlayerContextType {
-    currentTrack: Track;
-    setCurrentTrack: Dispatch<SetStateAction<Track>>;
+    currentTrack: Track | undefined;
+    setCurrentTrack: Dispatch<SetStateAction<Track | undefined>>;
+    audioRef: RefObject<HTMLAudioElement | null>;
+    progressBarRef: RefObject<HTMLInputElement | null>;
+    timeProgress: number;
+    setTimeProgress: Dispatch<SetStateAction<number>>;
 }
 
 const AudioPlayerContext = createContext<AudioPlayerContextType | undefined>(undefined);
@@ -20,21 +39,17 @@ const AudioPlayerContext = createContext<AudioPlayerContextType | undefined>(und
 export const AudioPlayerProvider = ({children}: {children: ReactNode}) => {
     const [currentTrack, setCurrentTrack] = useState<Track>();
     const [timeProgress, setTimeProgress] = useState<number>(0);
-    const [duration, setDuration] = useState<number>(0);
-
 
     const audioRef = useRef<HTMLAudioElement>(null);
     const progressBarRef = useRef<HTMLInputElement>(null);
     
-    const contextValue = {
+    const contextValue: AudioPlayerContextType = {
         currentTrack,
         setCurrentTrack,
         audioRef,
         progressBarRef,
         timeProgress,
-        setTimeProgress,
-        duration,
-        setDuration
+        setTimeProgress
     };
     
     return (

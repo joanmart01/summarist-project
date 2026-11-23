@@ -1,13 +1,17 @@
 "use client";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import LoginModal from "../components/LoginModal/LoginModal";
 import DashboardSidebar from "../components/Dashboard/DashboardSidebar";
-import DashboardSearchBar from "../components/Dashboard/DashboardSearchBar";
+import SearchBar from "../components/SearchBar";
+import DashboardModal from "../components/Dashboard/DashboardModal";
 import { AudioPlayerProvider } from "../components/Player/audio-player-context";
 import { AudioPlayer } from "../components/Player/AudioPlayer";
 import Footer from "../components/Footer";
+import { auth, usersDb, db } from "@/firebase";
+import { getDoc, doc, collection } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,15 +32,55 @@ export const metadata = {
 
 export const LayoutContext = createContext();
 
+export const smFontSize = {str: "md:text-base", num: 16};
+export const medFontSize = {str: "md:text-lg", num: 18};
+export const lgFontSize = {str: "md:text-[22px]", num: 22};
+export const xlgFontSize = {str: "md:text-[26px]", num: 26};
+
 export default function RootLayout({ children }) {
   
   const [loginModal, showLoginModal] = useState(false);
   const [dashboard, showDashboard] = useState(false);
+  const [dashModal, showDashModal] = useState(false);
   const [player, showPlayer] = useState(false);
   const [readingMode, setReadingMode] = useState(false);
-  const [fontSize, setFontSize] = useState(16);
+  const [fontSize, setFontSize] = useState(smFontSize);
   const [bookInfoMode, setBookInfoMode] = useState(true);
-  const [currentUser, setCurrentUser] = useState(null);
+  const [user, setUser] = useState(null);
+
+  useEffect(()=> {
+    onAuthStateChanged(auth, async (currentUser)=> {
+        console.log(currentUser);
+        async function getUserData() {
+          const docRef = await getDoc(doc(usersDb, auth.currentUser.uid));
+          return docRef.data();
+        }
+        if(currentUser) {
+          const curr = await getUserData();
+          setUser({
+            savedBooksRef: collection(db, "users", auth.currentUser.uid, "saved_books"),
+            finishedBooksRef: collection(db, "users", auth.currentUser.uid, "finished_books"),
+            email: curr.email,
+            subscription: curr.subscription,
+            accessLevel: curr.userLevel
+          })
+        }
+        else 
+          setUser({
+            savedBooksRef: "",
+            finishedBooksRef: "",
+            email: "",
+            library: "",
+            subscription: "guest",
+            accessLevel: 0
+          });
+    })
+    
+    // Cleanup listener on unmount
+    //return () => unsubscribe();
+  }, [])
+
+
 
   const contextValue = {
     showLoginModal,
@@ -46,14 +90,10 @@ export default function RootLayout({ children }) {
     setReadingMode,
     fontSize,
     setFontSize,
+    bookInfoMode,
     setBookInfoMode,
-    currentUser,
-    setCurrentUser
-  }
-
-  function handleDashboard(show) {
-    if(loginModal) showLoginModal(!show);
-    showDashboard(show)
+    user,
+    showDashModal
   }
 
   return (
@@ -61,28 +101,30 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="overflow-y-hidden">
+      <body className="overflow-y-hidden overflow-x-hidden">
         <LayoutContext.Provider value={contextValue} className="min-h-full flex flex-col">
           
-          {loginModal && 
-          <LoginModal closeFunction={showLoginModal} dashboardFunction={handleDashboard} userSetterFunction={setCurrentUser} />}
+          {loginModal && <LoginModal />}
           
           <AudioPlayerProvider>
             {dashboard? 
-              <div className="flex flex-row">
-                  <DashboardSidebar readingMode={readingMode}
-                                    bookInfoMode={bookInfoMode}
-                                    bookInfoModeFunction={setBookInfoMode} 
-                                    fontSizeFunction={setFontSize}
-                                    currentUser={currentUser}
-                                    userSetterFunction={setCurrentUser}
-                                    openLoginModal={showLoginModal}
-                                    playerShowing={player}/>
-                  <div className="flex flex-col w-full">
-                    <DashboardSearchBar />
-                      <div className={`w-full h-[calc(100vh-${player? "200" : "80"}px)] overflow-y-auto`}>
+              <div className="flex flex-row w-screen">
+                  {dashModal && <DashboardModal heightClass={player? "h-[calc(100%-280px)]" : "h-full"} />}
+                  <DashboardSidebar heightClass={player? "h-[calc(100%-136px)]" : "h-full"} />
+                  <div className="flex flex-col">
+                      <SearchBar />
+                      {player?
+                      <div className={`w-full h-[calc(100vh-136px)] overflow-y-auto`}>
                         {children}
                       </div>
+                      :
+                      <div className={`w-full h-[calc(100vh-80px)] overflow-y-auto`}>
+                        {children}
+                      </div>
+                      }
+                      {/* <div className={`h-[calc(100vh-${player? "136" : "80"}px)] overflow-y-auto`}>
+                        {children}
+                      </div> */}
                   </div>
               </div>
             :

@@ -14,7 +14,28 @@
   --font-roboto: "Roboto", sans-serif;
   --color-coolgreen: #2bd97c;
   --color-deepblue: #032b41;
-  /* --transition-property-height: height; */
+  --animate-dotLoop: dotLoop 1.5s steps(1,end) infinite;
+  
+  @keyframes dotLoop {
+    0% {
+      content: '.';
+    }
+    33% {
+      content: '..'; 
+    }
+    66% {
+      content: '...'; 
+    }
+    100% {
+      content: none; 
+    }
+  }
+
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
 }
 
 @layer base {
@@ -84,7 +105,7 @@
   }
 
   .section__title {
-    @apply text-[1.5rem] md:text-[2rem] text-[#032b41] text-center font-bold;
+    @apply text-[1.5rem] md:text-[2rem] text-deepblue text-center font-bold;
   }
   
   .login__btn {
@@ -102,7 +123,7 @@
   }
 
   .feature__icon--wrapper {
-    @apply flex justify-center mb-2 text-[#032b41];
+    @apply flex justify-center mb-2 text-deepblue;
   }
 
   .feature__icon {
@@ -110,7 +131,7 @@
   }
 
   .feature__title {
-    @apply text-[1.25rem] md:text-[1.5rem] text-[#032b41] mb-4 font-medium;
+    @apply text-[1.25rem] md:text-[1.5rem] text-deepblue mb-4 font-medium;
   }
 
   .feature__subtitle {
@@ -174,7 +195,7 @@
   }
 
   .number__title {
-    @apply text-[2rem] md:text-[2.5rem] text-[#032b41] font-semibold mb-4;
+    @apply text-[2rem] md:text-[2.5rem] text-deepblue font-semibold mb-4;
   }
 
   .number__subtitle {
@@ -194,20 +215,42 @@
   }
 
   .modal__field {
-    @apply px-3 border-2 border-gray-300 text-sm outline-0 focus:border-[#2bd97c];
+    @apply px-3 border-2 border-gray-300 text-sm outline-0 focus:border-coolgreen;
   }
 
 
   /* DASHBOARD SIDEBAR */
   .dashboard__link {
-    @apply flex items-center h-14 text-[#032b41] 
+    @apply flex items-center h-14 text-deepblue
          hover:bg-[#f0efef] transition-colors duration-200;
   }
 
 
 
-  /* .transition__height {
-    transition-property: height;
-  } */
+  /*SKELETON LOADING STATE */
+  .skeleton-box {
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    background-color: #dddbdd;
+  }
+
+  .skeleton-box::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0,
+      rgba(255, 255, 255, 0.2) 20%,
+      rgba(255, 255, 255, 0.5) 60%,
+      rgba(255, 255, 255, 0)
+    );
+    animation: shimmer 2s infinite;
+    content: "";
+  }
 
 }

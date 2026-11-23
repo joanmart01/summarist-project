@@ -2,54 +2,52 @@
 import { useContext } from "react";
 import { LayoutContext } from "../layout";
 import {useRouter} from "next/navigation";
+import { upperCaseStr } from "../../components/tools";
+import { deleteCurrentUserAccount } from "../../firebase";
+import LoginPrompt from "../../components/LoginPrompt";
 
 function Page() {
     const router = useRouter();
-    const {currentUser, showLoginModal, showDashboard} = useContext(LayoutContext);
-
+    const {showDashboard, user} = useContext(LayoutContext);
+    
     function goToChoosePlanPage() {
         showDashboard(false);
         router.push("/choose-plan");
     }
 
     return (
-        <div className="flex justify-center">
+        <div className="row flex justify-center">
             <div className="flex flex-col w-full max-w-267 py-6 text-deepblue">
                 <h2 className="pb-4 border-b border-[#e1e7ea]">Settings</h2>
 
-                    {currentUser==null?
+                    {user.accessLevel==0?
                     
-                    <div className="flex flex-col self-center items-center max-w-115">
-                        <img src="images/login.png" className="w-full h-full" />
-                        <h3 className="mb-4">Log in to your account to see your details.</h3>
-                        <button className="login__btn max-w-45"
-                                onClick={showLoginModal}>
-                            Login
-                        </button>
-                    </div>
+                    <LoginPrompt/>
 
                     :
 
                     <div>
                         <div className="flex flex-col gap-2 pb-6 pt-8 items-start border-b border-[#e1e7ea]">
                             <h5 className="font-bold">Your Subscription plan</h5>
-                            <p>{currentUser.subscription}</p>
-
-                            <button className="login__btn max-w-45"
+                            <p>{upperCaseStr(user.subscription)}</p>
+                            {user.accessLevel < 3 &&
+                            <button className="login__btn max-w-50"
                                     onClick={goToChoosePlanPage}>
-                                    {currentUser.subscription=="basic"? 
-                                    "Upgrade to Premium"
-                                    :
-                                    currentUser.subscription=="premium" &&
-                                    "Upgrade to Premium-Plus"
-                            }
-                            </button>
-
-                            
+                                {user.accessLevel < 2 ? "Upgrade to Premium" : "Upgrade to Premium-Plus"}
+                            </button>}
                         </div>
-                        <div className="flex flex-col items-start justify-center gap-2 pb-6 pt-8">
+                        <div className="flex flex-col items-start justify-center gap-2 pb-6 pt-8 border-b border-[#e1e7ea]">
                             <h5 className="font-bold">Email</h5>
-                            <p>{currentUser.email}</p>
+                            <p>{user.email}</p>
+                        </div>
+
+                        <div className="flex pb-6 pt-8">
+                            {user.accessLevel > 0 &&
+                            <button className="py-2 px-4 text-sm w-40 rounded-lg bg-amber-100 
+                                            hover:bg-amber-200 active:bg-amber-300 transition-colors duration-300" 
+                                    onClick={deleteCurrentUserAccount}>
+                                        Delete Account and Cancel Subscription
+                            </button>}
                         </div>
                     </div>
 

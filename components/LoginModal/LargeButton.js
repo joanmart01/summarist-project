@@ -2,7 +2,7 @@ function LargeButton({text, bgColor, textColor, icon, clickFunction}) {
 
     return (
         <button className={`relative modal__comp--size ${bgColor} ${textColor}
-                            active:translate-y-0.25 transition-colors duration-200`}
+                            active:translate-y-px transition-colors duration-200`}
                 onClick={clickFunction}>
             {
             icon &&
