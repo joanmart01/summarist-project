@@ -4,34 +4,17 @@ import { BsFillPlayFill } from "react-icons/bs";
 import BookRow from "../../components/BookRow";
 import SkeletonRow from "../../components/Loading/SkeletonRow";
 import SkeletonBox from "../../components/Loading/SkeletonBox";
-import { headers } from "next/headers";
-
 
 
 async function ForYouPage() {
     await new Promise((resolve) => setTimeout(resolve, 1500));
-
-    const headersData = await headers();
-    const authorization = headersData.get("authorization");
-    const host = headersData.get("host");
-    const protocol = headersData.get("x-forwarded-proto") ?? host.startWith("localhost") ? "http" : "https";
-    const apiBase = `${protocol}://${host}`;
-
     const recommendedTitle = "Recommended For You";
     const recommendedSub = "Suggested Books";
     const suggestedTitle = "Suggested Books";
     const suggestedSub = "Browse those books";    
 
     async function SelectedBook() {
-        console.log("api base:" + apiBase);
-        //const res = await fetch(`${apiBase}/api/books/selected`);
         //const res = await fetch(`http://localhost:3000/api/books/selected`);
-        /*const res = await fetch(`/api/books/selected`, {
-            headers: {
-                "authorization": authorization,
-                "Content-Type": "application/json",
-            },
-        });*/
         const res = await fetch(`https://summarist-project-gray.vercel.app/api/books/selected`);
         console.log(res);
         const {data} = await res.json();
@@ -65,15 +48,7 @@ async function ForYouPage() {
     }
 
     async function RecommendedBooks(){
-        console.log("api base:" + apiBase);
-        //const res = await fetch(`${apiBase}/api/books/recommended`);
         //const res = await fetch(`http://localhost:3000/api/books/recommended`);
-         /*       const res = await fetch(`/api/books/recommended`, {
-            headers: {
-                "authorization": authorization,
-                "Content-Type": "application/json",
-            },
-        });*/
         const res = await fetch(`https://summarist-project-gray.vercel.app/api/books/recommended`);
         console.log(res);
         const {data} = await res.json();
@@ -87,15 +62,7 @@ async function ForYouPage() {
     }
 
     async function SuggestedBooks() {
-        console.log("api base:" + apiBase);
-        //const res = await fetch(`${apiBase}/api/books/suggested`);
         //const res = await fetch(`http://localhost:3000/api/books/suggested`);
-        /*const res = await fetch(`/api/books/suggested`, {
-            headers: {
-                "authorization": authorization,
-                "Content-Type": "application/json",
-            },
-        });*/
         const res = await fetch(`https://summarist-project-gray.vercel.app/api/books/suggested`);
         console.log(res);
         const {data} = await res.json();

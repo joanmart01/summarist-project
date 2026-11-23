@@ -1,14 +1,12 @@
 import { NextResponse } from "next/server";
-import { getAllBooks } from "../../../lib/books";
 
 export async function GET(request, {params}) {
     try {
-
         const {bookId} = await params;
         //const res = await fetch("http://localhost:3000/api/books");
-        //if (!res.ok) throw new Error(`Failed to fetch products: ${res.status}`);
-        //const data = await res.json();
-        const data = await getAllBooks();
+        const res = await fetch("https://summarist-project-gray.vercel.app/api/books");
+        if (!res.ok) throw new Error(`Failed to fetch products: ${res.status}`);
+        const data = await res.json();
         const book = data.find((i) => String(i.id) === String(bookId));
         if (!book) {
             return NextResponse.json(

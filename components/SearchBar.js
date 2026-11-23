@@ -15,8 +15,6 @@ function SearchBar() {
     const negative_state = 2;
     const results_state = 3;
 
-    const apiBase = window.location.origin
-
     const [typing, setTyping] = useState(false);
     const [searchState, setSearchState] = useState(dormant_state);
     const [searchArray, setSearchArray] = useState();
@@ -51,9 +49,8 @@ function SearchBar() {
         }
         setSearchState(loading_state);
         try {
-            console.log("api base:" + apiBase);
-            const res = await fetch(`${apiBase}/api/books/search/${search}`);
             //const res = await fetch(`http://localhost:3000/api/books/search/${search}`);
+            const res = await fetch(`https://summarist-project-gray.vercel.app/api/books/search/${search}`);
             const data = await res.json();
             const books = data || [];
             setSearchArray(books);
