@@ -25,6 +25,7 @@ async function ForYouPage() {
         console.log("api base:" + apiBase);
         const res = await fetch(`${apiBase}/api/books/selected`);
         //const res = await fetch(`http://localhost:3000/api/books/selected`);
+        console.log(res);
         const {data} = await res.json();
         const book = data[0];
         return (
@@ -59,6 +60,7 @@ async function ForYouPage() {
         console.log("api base:" + apiBase);
         const res = await fetch(`${apiBase}/api/books/recommended`);
         //const res = await fetch(`http://localhost:3000/api/books/recommended`);
+        console.log(res);
         const {data} = await res.json();
         return (
             <BookRow title={recommendedTitle} 
@@ -73,6 +75,7 @@ async function ForYouPage() {
         console.log("api base:" + apiBase);
         const res = await fetch(`${apiBase}/api/books/suggested`);
         //const res = await fetch(`http://localhost:3000/api/books/suggested`);
+        console.log(res);
         const {data} = await res.json();
         return (
             <BookRow title={suggestedTitle}
