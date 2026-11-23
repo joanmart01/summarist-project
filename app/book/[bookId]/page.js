@@ -13,7 +13,7 @@ async function BookPage({params}) {
     
     async function BookInfo() {    
         const {bookId} = await params;
-        const res = await fetch(`http://localhost:3000/api/books/${bookId}`);
+        const res = await fetch(`/api/books/${bookId}`);
         const bookInfo = await res.json();
         return (
             <div className="flex flex-col items-center gap-4 text-deepblue

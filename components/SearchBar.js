@@ -48,7 +48,7 @@ function SearchBar() {
         }
         setSearchState(loading_state);
         try {
-            const res = await fetch(`http://localhost:3000/api/books/search/${search}`);
+            const res = await fetch(`/api/books/search/${search}`);
             const data = await res.json();
             const books = data || [];
             setSearchArray(books);
