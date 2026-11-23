@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
+import { getAllBooks } from "../../../lib/books";
 
 export async function GET() {
     try {
 
-        const res = await fetch("http://localhost:3000/api/books");
-        if (!res.ok) throw new Error(`Failed to fetch products: ${res.status}`);
-        const data = await res.json();
-  //      const books = data.filter((book) => book.librarySection === "selected");
+        //const res = await fetch("http://localhost:3000/api/books");
+        //if (!res.ok) throw new Error(`Failed to fetch products: ${res.status}`);
+        //const data = await res.json();
+        const data = await getAllBooks();
         const books = data.filter((book) => book.status === "selected");
         return NextResponse.json({
             success: true,

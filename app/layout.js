@@ -46,7 +46,14 @@ export default function RootLayout({ children }) {
   const [readingMode, setReadingMode] = useState(false);
   const [fontSize, setFontSize] = useState(smFontSize);
   const [bookInfoMode, setBookInfoMode] = useState(true);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({
+            savedBooksRef: "",
+            finishedBooksRef: "",
+            email: "",
+            library: "",
+            subscription: "guest",
+            accessLevel: 0
+          });
 
   useEffect(()=> {
     onAuthStateChanged(auth, async (currentUser)=> {
