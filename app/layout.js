@@ -50,7 +50,6 @@ export default function RootLayout({ children }) {
 
   useEffect(()=> {
     onAuthStateChanged(auth, async (currentUser)=> {
-        console.log(currentUser);
         async function getUserData() {
           const docRef = await getDoc(doc(usersDb, auth.currentUser.uid));
           return docRef.data();
