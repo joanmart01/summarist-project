@@ -10,7 +10,9 @@ export async function GET() {
 
         //if (!res.ok) throw new Error(`Failed to fetch products: ${res.status}`);
         //const data = await res.json();
+        console.log("fetching suggested books");
         const books = data.filter((book) => book.status === "suggested");
+         console.log("suggested books: " + books);
         return NextResponse.json({
             success: true,
             count: books.length,

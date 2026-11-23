@@ -7,8 +7,10 @@ export async function GET() {
         //const res = await fetch("http://localhost:3000/api/books");
         //if (!res.ok) throw new Error(`Failed to fetch products: ${res.status}`);
         //const data = await res.json();
+        console.log("fetching recommended books")
         const data = await getAllBooks();
         const books = data.filter((book) => book.status === "recommended");
+        console.log("recommended books: " + books);
         return NextResponse.json({
             success: true,
             count: books.length,
