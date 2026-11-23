@@ -22,6 +22,7 @@ async function ForYouPage() {
     const suggestedSub = "Browse those books";    
 
     async function SelectedBook() {
+        console.log("api base:" + apiBase);
         const res = await fetch(`${apiBase}/api/books/selected`);
         //const res = await fetch(`http://localhost:3000/api/books/selected`);
         const {data} = await res.json();
@@ -55,6 +56,7 @@ async function ForYouPage() {
     }
 
     async function RecommendedBooks(){
+        console.log("api base:" + apiBase);
         const res = await fetch(`${apiBase}/api/books/recommended`);
         //const res = await fetch(`http://localhost:3000/api/books/recommended`);
         const {data} = await res.json();
@@ -68,6 +70,7 @@ async function ForYouPage() {
     }
 
     async function SuggestedBooks() {
+        console.log("api base:" + apiBase);
         const res = await fetch(`${apiBase}/api/books/suggested`);
         //const res = await fetch(`http://localhost:3000/api/books/suggested`);
         const {data} = await res.json();

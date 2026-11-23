@@ -18,6 +18,7 @@ async function BookPage({params}) {
         const host = headersData.get("host");
         const protocol = headersData.get("x-forwarded-proto") ?? host.startWith("localhost") ? "http" : "https";
         const apiBase = `${protocol}://${host}`;
+        console.log("api base:" + apiBase);
         const res = await fetch(`${apiBase}/api/books/${bookId}`);
         //const res = await fetch(`http://localhost:3000/api/books/${bookId}`);
         const bookInfo = await res.json();
