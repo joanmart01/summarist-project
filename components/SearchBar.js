@@ -56,7 +56,7 @@ function SearchBar() {
             setSearchArray(books);
             setTimeout(() => {
                 setSearchState(books.length>0 ? results_state : negative_state); 
-            }, 1000);
+            }, 500);
             
         } catch(err) {
             console.log(err);

@@ -18,7 +18,15 @@ export async function GET(request, {params}) {
                 { status: 404 }
             );
         }
-        return NextResponse.json(books, { status: 200 });
+        return NextResponse.json(books, 
+                                { status: 200, 
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                    'Access-Control-Allow-Origin': '*',
+                                    'Access-Control-Allow-Methods': 'GET',
+                                    'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+                                  }
+                                });
 
     } catch (error) {
         console.error('Error fetching books:', error);

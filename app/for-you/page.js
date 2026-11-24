@@ -16,7 +16,6 @@ async function ForYouPage() {
     async function SelectedBook() {
         //const res = await fetch(`http://localhost:3000/api/books/selected`);
         const res = await fetch(`https://summarist-project-gray.vercel.app/api/books/selected`);
-        console.log(res);
         const {data} = await res.json();
         const book = data[0];
         return (
@@ -50,7 +49,6 @@ async function ForYouPage() {
     async function RecommendedBooks(){
         //const res = await fetch(`http://localhost:3000/api/books/recommended`);
         const res = await fetch(`https://summarist-project-gray.vercel.app/api/books/recommended`);
-        console.log(res);
         const {data} = await res.json();
         return (
             <BookRow title={recommendedTitle} 
@@ -64,7 +62,6 @@ async function ForYouPage() {
     async function SuggestedBooks() {
         //const res = await fetch(`http://localhost:3000/api/books/suggested`);
         const res = await fetch(`https://summarist-project-gray.vercel.app/api/books/suggested`);
-        console.log(res);
         const {data} = await res.json();
         return (
             <BookRow title={suggestedTitle}
